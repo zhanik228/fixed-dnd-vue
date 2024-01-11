@@ -1,9 +1,11 @@
 <template>
-  <div ref="column" class="col kanban-column">
-    <h2 class="text-light text-start">{{ title }}</h2>
-    <div class="kanban-items" v-for="item in items" :key="item.id">
-      <kanban-card :card="item.content" />
-      <div class="kanban-dropzone"></div>
+  <div class="col">
+    <div ref="column" class="kanban-column">
+      <h2 class="text-light text-start">{{ title }}</h2>
+      <drop-zone />
+        <div class="kanban-items" v-for="item in items" :key="item.id">
+          <kanban-card :card="item.content" />
+        </div>
     </div>
   </div>
 </template>
@@ -11,7 +13,7 @@
 <script>
 import KanbanCard from '@/components/kanban/KanbanCard.vue';
 import KanbanApi from '@/api/KanbanApi';
-import DropZone from '@/view/DropZone';
+import DropZone from './DropZone.vue';
 
 export default {
   data() {
@@ -19,7 +21,7 @@ export default {
       items: [],
     };
   },
-  components: { KanbanCard },
+  components: { KanbanCard, DropZone },
   props: {
     title: {
       required: false,
@@ -30,13 +32,10 @@ export default {
   },
   async mounted() {
     this.$refs.column.dataset.id = this.id;
+
     setInterval(async () => {
       this.items = await KanbanApi.getItems(this.id);
     }, 1000);
-    const topDropzone = DropZone.createDropZone();
-    this.$refs.column.prepend(topDropzone);
-    const bottomDropzone = DropZone.createDropZone();
-    this.$refs.column.appendChild(bottomDropzone);
   },
 };
 </script>

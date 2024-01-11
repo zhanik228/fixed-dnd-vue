@@ -1,5 +1,11 @@
 <template>
-  <div ref="thisCard" class="card" style="width: 18rem;" draggable @dragstart="handleDragStart">
+  <div class="card-container" ref="thisCard">
+    <drop-zone />
+  <div
+    class="card w-full"
+    draggable
+    @dragstart="handleDragStart"
+  >
     <img :src="card.picture.large"
          class="card-img-top" alt="Chicago Skyscrapers"/>
     <div class="card-body">
@@ -17,18 +23,18 @@
       <li class="list-group-item px-4">Dapibus ac facilisis in</li>
       <li class="list-group-item px-4">Vestibulum at eros</li>
     </ul>
-    <div class="card-body">
-      <a href="#" class="card-link">Card link</a>
-      <a href="#" class="card-link">Another link</a>
-    </div>
+  </div>
+  <drop-zone />
   </div>
 </template>
 
 <script>
-
-import DropZone from '@/view/DropZone';
+import DropZone from './DropZone.vue';
 
 export default {
+  components: {
+    DropZone,
+  },
   props: {
     card: {
       required: false,
@@ -41,10 +47,12 @@ export default {
   },
   mounted() {
     this.$refs.thisCard.dataset.id = this.card.email;
-    const topDropzone = DropZone.createDropZone();
-    this.$refs.thisCard.prepend(topDropzone);
-    const bottomDropzone = DropZone.createDropZone();
-    this.$refs.thisCard.appendChild(bottomDropzone);
   },
 };
 </script>
+
+<style scoped>
+.card {
+  z-index: 2;
+}
+</style>

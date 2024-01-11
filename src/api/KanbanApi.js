@@ -1,7 +1,7 @@
-import store from '@/store';
+import store from "@/store";
 
 async function read() {
-  const json = localStorage.getItem('kanban-data');
+  const json = localStorage.getItem("kanban-data");
 
   if (!json) {
     return [
@@ -23,7 +23,7 @@ async function read() {
   return JSON.parse(json);
 }
 function save(data) {
-  localStorage.setItem('kanban-data', JSON.stringify(data));
+  localStorage.setItem("kanban-data", JSON.stringify(data));
 }
 
 export default class KanbanApi {
@@ -40,7 +40,7 @@ export default class KanbanApi {
 
   static async insertItem(columnId) {
     const data = await read();
-    await store.dispatch('GET_PROFILE');
+    await store.dispatch("GET_PROFILE");
     const card = store.getters.PROFILE;
     const column = data.find((col) => col.id === columnId);
     const item = {
@@ -49,7 +49,7 @@ export default class KanbanApi {
     };
 
     if (!column) {
-      throw new Error('Column does not exist');
+      throw new Error("Column does not exist");
     }
 
     column.items.push(item);
@@ -73,20 +73,17 @@ export default class KanbanApi {
     });
 
     if (!foundItem) {
-      throw new Error('Item not found.');
+      throw new Error("Item not found.");
     }
 
     const [item, currentColumn] = foundItem;
     item.content = newProps.content === undefined ? item.content : newProps.content;
 
     console.log(item, currentColumn);
-    if (
-      newProps.columnId !== undefined
-      && newProps.position !== undefined
-    ) {
+    if (newProps.columnId !== undefined && newProps.position !== undefined) {
       const targetColumn = data.find((column) => column.id === newProps.columnId);
       if (!targetColumn) {
-        throw new Error('Target column not found');
+        throw new Error("Target column not found");
       }
 
       currentColumn.items.splice(currentColumn.items.indexOf(item), 1);
@@ -108,7 +105,7 @@ export default class KanbanApi {
     });
 
     if (!foundItem) {
-      throw new Error('Item not found.');
+      throw new Error("Item not found.");
     }
 
     const [item, column] = foundItem;
